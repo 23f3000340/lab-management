@@ -15,7 +15,9 @@ import app.models  # noqa: F401
 
 alembic_db_url = settings.DATABASE_URL
 if alembic_db_url.startswith("postgres://"):
-    alembic_db_url = alembic_db_url.replace("postgres://", "postgresql://", 1)
+    alembic_db_url = alembic_db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+elif alembic_db_url.startswith("postgresql://") and not alembic_db_url.startswith("postgresql+"):
+    alembic_db_url = alembic_db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
 
 config = context.config
 config.set_main_option("sqlalchemy.url", alembic_db_url)
